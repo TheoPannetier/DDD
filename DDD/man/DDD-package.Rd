@@ -116,6 +116,7 @@ under diversity-dependent diversification models.\cr \cr
    - Fixes tiny bug in p-value computation in dd_LR\cr\cr
    New in version 3.3\cr
    - Documentation for several previously internal functions that were used by other packages\cr
+   - Small bug fix of L2phylo function (previously digits could be dropped in conversion from numbers as characters to numeric)\cr\cr
    - Contains a function to simulate the SR model \cr\cr
    Forthcoming:\cr
    - High-precision arithmetic in numerically unstable regions of bd_loglik\cr
