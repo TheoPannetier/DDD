@@ -1,8 +1,8 @@
 Package: DDD
 Type: Package
 Title: Diversity-Dependent Diversification
-Version: 3.3
-Date: 2016-7-13
+Version: 3.4
+Date: 2017-02-23
 Depends: R (>= 3.0.2), deSolve, ape, ade4
 Imports: phytools, subplex, Matrix, expoRkit, SparseM
 Author: Rampal S. Etienne & Bart Haegeman
