@@ -52,7 +52,7 @@ if(is.numeric(brts) == FALSE)
 } else {
 idparsnoshift = sort(idparsnoshift)
 idpars = sort(c(idparsopt,idparsfix,idparsnoshift))
-if((sum(idpars == (1:7)) != 7) || (length(initparsopt) != length(idparsopt)) || (length(parsfix) != length(idparsfix)))
+if((prod(idpars == (1:7)) != 1) || (length(initparsopt) != length(idparsopt)) || (length(parsfix) != length(idparsfix)))
 {
    cat("The parameters to be optimized, fixed and not shifted are incoherent.\n")
    out2 = data.frame(row.names = "results",lambda_1 = -1, mu_1 = -1, K_1 = -1, lambda_2 = -1, mu_2 = -1, K_2 = -1, t_shift = -1, loglik = -1, df = -1, conv = -1)

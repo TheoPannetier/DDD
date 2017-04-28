@@ -1,7 +1,7 @@
 {
     "installOptions" : {
         "installDependencies" : true,
-        "installFromRepository" : true,
-        "libraryPath" : "C:/Users/rampa/Documents/R/win-library/3.4"
+        "installFromRepository" : false,
+        "libraryPath" : "C:/Program Files/R/R-devel/library"
     }
 }
