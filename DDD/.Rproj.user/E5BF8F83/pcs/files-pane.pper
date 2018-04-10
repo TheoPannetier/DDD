@@ -1,9 +1,13 @@
 {
-    "path" : "D:/data/Ms/DDD/DDD/man",
+    "path" : "D:/data/Ms/DDD/DDD/src",
     "sortOrder" : [
         {
             "ascending" : true,
             "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 4
         }
     ]
 }

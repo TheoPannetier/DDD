@@ -1,4 +1,6 @@
 \name{DDD-internal}
+\alias{initparsoptdefault}
+\alias{parsfixdefault}
 \alias{dd_loglik1}
 \alias{dd_loglik2}
 \alias{dd_loglik_choosepar}
@@ -55,6 +57,12 @@
 \alias{expfun}
 \alias{logH}
 \alias{logLL}
+\alias{dd_integrate}
+\alias{dd_ode_FORTRAN}
+\alias{dd_loglik_rhs_precomp}
+\alias{fill1d}
+\alias{initmod}
+\alias{runmod}
 \title{Internal DDD Functions}
 \description{Internal DDD functions}
 \details{These are not to be called by the user.}

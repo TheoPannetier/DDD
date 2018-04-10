@@ -5,7 +5,14 @@
   This function computes loglikelihood of a diversity-dependent diversification model
   for a given set of branching times and parameter values.
 }
-\usage{dd_loglik(pars1, pars2, brts, missnumspec, methode = 'analytical')}
+\usage{dd_loglik(
+   pars1,
+   pars2,
+   brts,
+   missnumspec,
+   methode = 'analytical',
+   rhs_func_name = 'dd_loglik_rhs')
+}
 \arguments{
   \item{pars1}{Vector of parameters: \cr \cr
     \code{pars1[1]} corresponds to lambda (speciation rate) \cr
@@ -18,6 +25,8 @@
     \code{pars2[2]} sets the model of diversity-dependence: \cr
     - \code{pars2[2] == 1} linear dependence in speciation rate with parameter K (= diversity where speciation = extinction)\cr
     - \code{pars2[2] == 1.3} linear dependence in speciation rate with parameter K' (= diversity where speciation = 0)\cr 
+    - \code{pars2[2] == 1.4} : positive diversity-dependence in speciation rate with parameter K' (= diversity where speciation rate reaches half its maximum); lambda = lambda0 * S/(S + K') where S is species richness\cr
+    - \code{pars2[2] == 1.5} : positive and negative diversity-dependence in speciation rate with parameter K' (= diversity where speciation = 0); lambda = lambda0 * S/K' * (1 - S/K') where S is species richness\cr
     - \code{pars2[2] == 2} exponential dependence in speciation rate with parameter K (= diversity where speciation = extinction)\cr
     - \code{pars2[2] == 2.1} variant of exponential dependence in speciation rate with offset at infinity\cr
     - \code{pars2[2] == 2.2} 1/n dependence in speciation rate\cr
@@ -39,6 +48,7 @@
   \item{brts}{A set of branching times of a phylogeny, all positive }
   \item{missnumspec}{The number of species that are in the clade but missing in the phylogeny }
   \item{methode}{The method used to solve the master equation, default is 'analytical' which uses matrix exponentiation; alternatively numerical ODE solvers can be used, such as 'lsoda' or 'ode45'. These were used in the package before version 3.1.}    
+  \item{rhs_func_name}{For internal use only}    
 }
 \value{The loglikelihood}
 \references{

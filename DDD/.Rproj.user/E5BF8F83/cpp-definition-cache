@@ -1,2 +1,17 @@
 [
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "D:/data/Ms/DDD/DDD/src/R_init_DDD.c",
+                "kind" : 6,
+                "line" : 18,
+                "name" : "R_init_DDD(DllInfo *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_init_DDD"
+            }
+        ],
+        "file" : "D:/data/Ms/DDD/DDD/src/R_init_DDD.c",
+        "file_last_write" : 1523218929
+    }
 ]

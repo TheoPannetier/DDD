@@ -122,7 +122,7 @@ if(MLpars1[3] > 10^7){ MLpars1[3] = Inf}
 if(MLpars1[6] > 10^7){ MLpars1[6] = Inf}
 s1 = sprintf('Maximum likelihood parameter estimates: %f %f %f %f %f %f %f',MLpars1[1],MLpars1[2],MLpars1[3],MLpars1[4],MLpars1[5],MLpars1[6],MLpars1[7])
 s2 = sprintf('Maximum loglikelihood: %f',ML)
-cat("\n",s1,"\n",s2,"\n")
+cat("\n",s1,"\n",s2,"\n\n")
 out$par = list(MLpars1)
 out$fvalues = list(ML)
 out2 = data.frame(row.names = "results",lambda_1 = MLpars1[1],mu_1 = MLpars1[2],K_1 = MLpars1[3],lambda_2 = MLpars1[4],mu_2 = MLpars1[5],K_2 = MLpars1[6],t_shift = MLpars1[7],loglik = ML,df = length(initparsopt),conv = unlist(out$conv))
