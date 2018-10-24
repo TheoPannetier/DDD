@@ -31,7 +31,17 @@
 # methode = the method used in the numerical solving of the set of the ode's
 
 dd_KI_loglik = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'analytical')
-{
+{ 
+   if(length(pars2) == 4)
+   {
+      pars2[5] = 0
+      pars2[6] = 2
+      pars2[7] = 1
+   }
+   if(is.na(pars2[7]))
+   {
+     pars2[7] == 0
+   }
    if(methode == 'analytical')
    {
        out = dd_KI_loglik2(pars1,pars2,brtsM,brtsS,missnumspec)
@@ -43,11 +53,6 @@ dd_KI_loglik = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'analytica
 
 dd_KI_loglik1 = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'lsoda')
 {
-if(length(pars2) == 4)
-{
-    pars2[5] = 0
-    pars2[6] = 2
-}
 abstol = 1e-16
 reltol = 1e-14
 m = missnumspec
@@ -158,6 +163,7 @@ if(((pars1[2] == 0 || pars1[4] == 0) && pars2[2] == 2) | ((pars1[1] == 0 | pars1
     {
        k1 = k + (soc - 2)
        t1 = max(tinn,brtsM[k - 1]); t2 = brtsM[k];
+       if(pars2[7] == 0) { probs = probs * k1/(k1 + (0:(length(probs) - 1))) }
        y = dd_integrate(probs,c(t1,t2),'dd_loglik_rhs',c(pars1[1:3],k1-1,ddep),rtol = reltol,atol = abstol,method = methode)
        probs = y[2,2:(lx + 1)]
        if(k < (S1+1))
@@ -378,7 +384,7 @@ if(((pars1[2] == 0 || pars1[4] == 0) && pars2[2] == 2) | ((pars1[1] == 0 | pars1
        dim(probs) = c(lx,lx)
        PM12 = sum(probs[2:lx,2:lx])
        PM2 = sum(probs[1,2:lx])
-       logliknorm = log(2) + log(PM12 + PS * PM2)
+       logliknorm = log(2) + (cond == 1) * log(PM12 + PS * PM2) + (cond == 4) * (log(PM12 + PM2) + log(PS))
     }
     if(length(m) > 1)
     {
@@ -407,11 +413,6 @@ return(loglik)
 
 dd_KI_loglik2 = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'lsoda')
 {
-if(length(pars2) == 4)
-{
-    pars2[5] = 0
-    pars2[6] = 2
-}
 abstol = 1e-16
 reltol = 1e-14
 m = missnumspec
@@ -528,6 +529,7 @@ if(((pars1[2] == 0 || pars1[4] == 0) && pars2[2] == 2) | ((pars1[1] == 0 | pars1
     {
        k1 = k + (soc - 2)
        t1 = max(tinn,brtsM[k - 1]); t2 = brtsM[k];
+       if(pars2[7] == 1) { probs = probs * k1/(k1 + (0:(length(probs) - 1))) }
        #y = ode(probs,c(t1,t2),dd_loglik_rhs,c(pars1[1:3],k1-1,ddep),rtol = reltol,atol = abstol,method = methode)
        #probs = y[2,2:(lx + 1)]
        probs = dd_loglik_M(pars1[1:3],lx,k1-1,ddep,tt = abs(t2 - t1),probs)
@@ -680,7 +682,7 @@ if(((pars1[2] == 0 || pars1[4] == 0) && pars2[2] == 2) | ((pars1[1] == 0 | pars1
        dim(probs) = c(lx,lx)      
        PM12 = sum(probs[2:lx,2:lx])
        PM2 = sum(probs[1,2:lx])
-       logliknorm = log(2) + log(PM12 + PS * PM2)
+       logliknorm = log(2) + (cond == 1) * log(PM12 + PS * PM2) + (cond == 4) * (log(PM12 + PM2) + log(PS))
     }
     if(length(m) > 1)
     {

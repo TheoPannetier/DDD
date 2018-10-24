@@ -29,7 +29,8 @@ dd_KI_ML(
     maxiter = 1000 * round((1.25)^length(idparsopt)),
     changeloglikifnoconv = FALSE,
     optimmethod = 'subplex',
-    methode = 'analytical'
+    methode = 'analytical',
+    correction = FALSE
     )
 }
 \arguments{
@@ -83,7 +84,8 @@ This can only apply to ids 4, 5 and 6, e.g. idparsnoshift = c(4,5) means that la
   \item{maxiter}{Sets the maximum number of iterations in the optimization}
   \item{changeloglikifnoconv}{ if TRUE the loglik will be set to -Inf if ML does not converge}
   \item{optimmethod}{ Method used in optimization of the likelihood. Current default is 'subplex'. Alternative is 'simplex' (default of previous versions)}
-  \item{methode}{The method used to solve the master equation, default is 'analytical' which uses matrix exponentiation; alternatively numerical ODE solvers can be used, such as 'lsoda' or 'ode45'. These were used in the package before version 3.1. }               
+  \item{methode}{The method used to solve the master equation, default is 'analytical' which uses matrix exponentiation; alternatively numerical ODE solvers can be used, such as 'lsoda' or 'ode45'. These were used in the package before version 3.1. }
+  \item{correction}{ Sets whether the correction should be applied (TRUE) or not (FALSE) }   
 }
 \details{
 The output is a dataframe containing estimated parameters and maximum loglikelihood.
