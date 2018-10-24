@@ -128,7 +128,10 @@ under diversity-dependent diversification models.\cr \cr
    - Fixes bug with ddmodel = 5\cr\cr
    New in version 3.7\cr
    - Fixes bug with specifying integration method in dd_LR\cr
-   - Faster integration by using compiled fortran code with deSolve\cr\cr
+   - Faster integration by using compiled fortran code with deSolve\cr
+   - Uses expm instead of expoRkit because the latter is no longer supported on CRAN\cr\cr
+   New in version 3.8\cr
+   - Uses coalescent approximation when mu/lambda is small and normal computation causes numerical problems\cr\cr
    Forthcoming:\cr
    - Computation of the likelihood according to a lineage-specific rate shift model under an otherwise constant-rate birth-death model.\cr\cr
    - High-precision arithmetic in numerically unstable regions of bd_loglik\cr
@@ -138,8 +141,8 @@ under diversity-dependent diversification models.\cr \cr
 \tabular{ll}{
 Package: \tab DDD\cr
 Type: \tab Package\cr
-Version: \tab 3.7\cr
-Date: \tab 2018-4-9\cr
+Version: \tab 3.8\cr
+Date: \tab 2018-9-27\cr
 License: \tab GPL 3.0\cr
 }
 bd_loglik compues the likelihood under the constant-rate birth-death model of several specific 

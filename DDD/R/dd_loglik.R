@@ -30,18 +30,38 @@
 # missnumspec = number of missing species    
 # methode = the method used in the numerical solving of the set of the ode's or 'analytical' which means matrix exponentiation is used
 
-dd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'analytical',rhs_func_name = 'dd_loglik_rhs')
+dd_loglik_test = function(pars1,pars2,brts,missnumspec,methode = 'analytical',rhs_func_name = 'dd_loglik_rhs')
 {
+  if(methode == 'analytical')
+  {
+    out = dd_loglik2(pars1,pars2,brts,missnumspec)
+  } else
+  {
+    out = dd_loglik1(pars1,pars2,brts,missnumspec,methode = methode,rhs_func_name = rhs_func_name)
+  }
+  return(out)
+}
+
+dd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'analytical')
+{
+   if(pars2[3] == 3)
+   {
+     rhs_func_name = 'dd_loglik_bw_rhs_FORTRAN'
+   } else
+   {
+     rhs_func_name = 'dd_loglik_rhs_FORTRAN'
+   }
    if(methode == 'analytical')
    {
-       out = dd_loglik2(pars1,pars2,brts,missnumspec)
-   } else {
-       out = dd_loglik1(pars1,pars2,brts,missnumspec,methode = methode,rhs_func_name)
+     out = dd_loglik2(pars1,pars2,brts,missnumspec)
+   } else
+   {
+     out = dd_loglik1(pars1,pars2,brts,missnumspec,methode = methode,rhs_func_name = rhs_func_name)
    }
    return(out)
 }
 
-dd_loglik1 = function(pars1,pars2,brts,missnumspec,methode = 'lsoda',rhs_func_name = 'dd_loglik_rhs')
+dd_loglik1 = function(pars1,pars2,brts,missnumspec,methode = 'lsoda',rhs_func_name = 'dd_loglik_rhs_FORTRAN')
 {
 if(length(pars2) == 4)
 {
@@ -103,6 +123,12 @@ if((mu == 0 & (ddep == 2 | ddep == 2.1 | ddep == 2.2)) | (la == 0 & (ddep == 4 |
              k1 = k + (soc - 2)
              y = dd_integrate(probs,brts[(k-1):k],rhs_func_name,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
              probs = y[2,2:(lx+1)]
+             if(is.na(sum(probs)) && pars1[2]/pars1[1] < 1E-4 && missnumspec == 0)
+             {
+               loglik = dd_loglik_high_lambda(pars1 = pars1,pars2 = pars2,brts = brts)
+               warning('High lambda approximation has been applied.')
+               return(loglik)
+             }
              if(k < (S + 2 - soc))
              {
                  probs = flavec(ddep,la,mu,K,r,lx,k1,n0) * probs # speciation event
@@ -122,7 +148,7 @@ if((mu == 0 & (ddep == 2 | ddep == 2.1 | ddep == 2.2)) | (la == 0 & (ddep == 4 |
           for(k in (S + 2 - soc):2)
           {
              k1 = k + (soc - 2)
-             y = dd_integrate(probs,-brts[k:(k-1)],dd_loglik_bw_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
+             y = dd_integrate(probs,-brts[k:(k-1)],rhs_func_name,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
              probs = y[2,2:(lx+2)]
              if(k > soc)
              {
@@ -165,14 +191,14 @@ if((mu == 0 & (ddep == 2 | ddep == 2.1 | ddep == 2.2)) | (la == 0 & (ddep == 4 |
              probsn = rep(0,lx + 1)
              probsn[S + missnumspec + 1] = 1
              TT = max(1,1/abs(la - mu)) * 1E+10 * max(abs(brts)) # make this more efficient later
-             y = dd_integrate(probsn,c(0,TT),dd_loglik_bw_rhs,c(pars1,0,ddep),rtol = reltol,atol = abstol,method = methode)
+             y = dd_integrate(probsn,c(0,TT),rhs_func_name,c(pars1,0,ddep),rtol = reltol,atol = abstol,method = methode)
              logliknorm = log(y[2,lx + 2])
              if(soc == 2)
              {
                 probsn = rep(0,lx + 1)
                 probsn[1:lx] = probs[1:lx]
                 probsn = c(flavec(ddep,la,mu,K,r,lx,1,n0),1) * probsn # speciation event
-                y = dd_integrate(probsn,c(max(abs(brts)),TT),dd_loglik_bw_rhs,c(pars1,1,ddep),rtol = reltol,atol = abstol,method = methode)
+                y = dd_integrate(probsn,c(max(abs(brts)),TT),rhs_func_name,c(pars1,1,ddep),rtol = reltol,atol = abstol,method = methode)
                 logliknorm = logliknorm - log(y[2,lx + 2])
              }
           }
@@ -268,8 +294,12 @@ if((mu == 0 & (ddep == 2 | ddep == 2.1 | ddep == 2.2)) | (la == 0 & (ddep == 4 |
              #y = ode(probs,brts[(k-1):k],rhs_func,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
              #probs2 = y[2,2:(lx+1)]
              probs = dd_loglik_M(pars1,lx,k1,ddep,tt = abs(brts[k] - brts[k-1]),probs)
-             #print(as.numeric(probs[1:10]))
-             #print(as.numeric(probs2[1:10])) 
+             if(is.na(sum(probs)) && pars1[2]/pars1[1] < 1E-4 && missnumspec == 0)
+             {
+               loglik = dd_loglik_high_lambda(pars1 = pars1,pars2 = pars2,brts = brts)
+               warning('High lambda approximation has been applied.')
+               return(loglik)
+             }
              if(k < (S + 2 - soc))
              {
                  #probs = flavec(ddep,la,mu,K,r,lx,k1,n0) * probs # speciation event
@@ -392,12 +422,12 @@ dd_integrate = function(initprobs,tvec,rhs_func,pars,rtol,atol,method)
   if(is.character(rhs_func))
   {
     rhs_func_name = rhs_func
-    if(rhs_func_name != 'dd_loglik_rhs_FORTRAN')
+    if(rhs_func_name != 'dd_loglik_rhs_FORTRAN' & rhs_func_name != 'dd_loglik_bw_rhs_FORTRAN')
     {
       rhs_func = match.fun(rhs_func)
     }
   }
-  if(rhs_func_name == 'dd_loglik_rhs' || rhs_func_name == 'dd_loglik_rhs_FORTRAN')
+  if(rhs_func_name == 'dd_loglik_rhs' || rhs_func_name == 'dd_loglik_bw_rhs' || rhs_func_name == 'dd_loglik_rhs_FORTRAN' || rhs_func_name == 'dd_loglik_bw_rhs_FORTRAN')
   {
     parsvec = c(dd_loglik_rhs_precomp(pars,initprobs),pars[length(pars) - 1])
   } else 
@@ -407,6 +437,10 @@ dd_integrate = function(initprobs,tvec,rhs_func,pars,rtol,atol,method)
   if(rhs_func_name == 'dd_loglik_rhs_FORTRAN')
   {
     y = dd_ode_FORTRAN(initprobs,tvec,parsvec,atol,rtol,method)
+  } else
+  if(rhs_func_name == 'dd_loglik_bw_rhs_FORTRAN')
+  {
+    y = dd_ode_FORTRAN(initprobs,tvec,parsvec,atol,rtol,method,runmod = "runmodbw")
   } else
   {
     y = ode(initprobs,tvec,rhs_func,parsvec,rtol = rtol,atol = atol,method = method)
@@ -420,14 +454,15 @@ dd_ode_FORTRAN <- function(
   parsvec,
   atol,
   rtol,
-  methode
+  methode,
+  runmod = "runmod"
 )
 {
   #system("R CMD SHLIB d:/data/ms/DDD/dd_loglik_rhs_FORTRAN.f")
   #dyn.load(paste("d:/data/ms/DDD/dd_loglik_rhs_FORTRAN", .Platform$dynlib.ext, sep = ""))
   N <- length(initprobs)
   probs <- ode(y = initprobs, parms = c(N + 0.,parsvec[length(parsvec)] + 0.), rpar = parsvec[-length(parsvec)], 
-               times = tvec, func = "runmod", initfunc = "initmod", 
+               times = tvec, func = runmod, initfunc = "initmod", 
                ynames = c("SV"), dimens = N + 2, nout = 1, outnames = c("Sum"), 
                dllname = "DDD",atol = atol, rtol = rtol, method = methode)[,1:(N + 1)]
   #dyn.unload(paste("d:/data/ms/DDD/dd_loglik_rhs_FORTRAN", .Platform$dynlib.ext, sep = ""))

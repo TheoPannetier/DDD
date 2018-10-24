@@ -10,8 +10,7 @@
    pars2,
    brts,
    missnumspec,
-   methode = 'analytical',
-   rhs_func_name = 'dd_loglik_rhs')
+   methode = 'analytical')
 }
 \arguments{
   \item{pars1}{Vector of parameters: \cr \cr
@@ -48,7 +47,6 @@
   \item{brts}{A set of branching times of a phylogeny, all positive }
   \item{missnumspec}{The number of species that are in the clade but missing in the phylogeny }
   \item{methode}{The method used to solve the master equation, default is 'analytical' which uses matrix exponentiation; alternatively numerical ODE solvers can be used, such as 'lsoda' or 'ode45'. These were used in the package before version 3.1.}    
-  \item{rhs_func_name}{For internal use only}    
 }
 \value{The loglikelihood}
 \references{
