@@ -40,7 +40,7 @@ dd_KI_loglik = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'analytica
    }
    if(is.na(pars2[7]))
    {
-     pars2[7] == 0
+     pars2[7] = 0
    }
    if(methode == 'analytical')
    {

@@ -131,9 +131,9 @@ under diversity-dependent diversification models.\cr \cr
    - Faster integration by using compiled fortran code with deSolve\cr
    - Uses expm instead of expoRkit because the latter is no longer supported on CRAN\cr\cr
    New in version 3.8\cr
-   - Uses coalescent approximation when mu/lambda is small and normal computation causes numerical problems\cr\cr
+   - Uses coalescent approximation when mu/lambda is small and normal computation causes numerical problems\cr
+   - Correction of the likelihood of the KI and MS models by a division by the number of species at the shift time. The old likelihood is still available (and the default). To use the correction, use pars2[7] = TRUE in dd_KI_loglik and dd_MS_loglik, and correction = TRUE in dd_KI_ML and dd_MS_ML.\cr\cr
    Forthcoming:\cr
-   - Computation of the likelihood according to a lineage-specific rate shift model under an otherwise constant-rate birth-death model.\cr\cr
    - High-precision arithmetic in numerically unstable regions of bd_loglik\cr
 }
 
@@ -142,7 +142,7 @@ under diversity-dependent diversification models.\cr \cr
 Package: \tab DDD\cr
 Type: \tab Package\cr
 Version: \tab 3.8\cr
-Date: \tab 2018-9-27\cr
+Date: \tab 2018-10-25\cr
 License: \tab GPL 3.0\cr
 }
 bd_loglik compues the likelihood under the constant-rate birth-death model of several specific 

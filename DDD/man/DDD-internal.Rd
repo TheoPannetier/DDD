@@ -55,6 +55,8 @@
 \alias{simplex}
 \alias{lambdamu}
 \alias{changepars}
+\alias{transform_pars}
+\alias{untransform_pars}
 \alias{expfun}
 \alias{logH}
 \alias{logLL}

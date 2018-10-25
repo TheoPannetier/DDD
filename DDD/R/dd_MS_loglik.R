@@ -44,8 +44,13 @@ dd_MS_loglik1 = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'analytic
 {
 if(length(pars2) == 4)
 {
-   pars2[5] = 0
-   pars2[6] = 2
+  pars2[5] = 0
+  pars2[6] = 2
+  pars2[7] = 1
+}
+if(is.na(pars2[7]))
+{
+  pars2[7] = 0
 }
 brtsM = -sort(abs(brtsM),decreasing = TRUE)
 maxbrtsS = 0
@@ -184,15 +189,20 @@ if(min(pars1[1:5]) < 0 | tinn <= min(brtsM) | tinn > maxbrtsS)
                
                if(t2 < 0 & t2 != tinn1)
                {
-                  if(brts[2,i] == 1)
-                  { 
-                     lavec = laMvec
+                  if(t2 != tinn1)
+                  {  
+                    if(brts[2,i] == 1)
+                    { 
+                      lavec = laMvec
+                    }
+                    if(brts[2,i] == 2)
+                    { 
+                      lavec = laSvec
+                    }
+                    probs = lavec[2:(lx+1),2:(lx+1)] * probs # speciation event
+                  } else {
+                    if(pars2[7] == TRUE) { probs = kM/(nxt + kM) * probs }
                   }
-                  if(brts[2,i] == 2)
-                  { 
-                     lavec = laSvec
-                  }
-                  probs = lavec[2:(lx+1),2:(lx+1)] * probs # speciation event
                   sumprobs = sum(probs)
                   if(sumprobs <= 0)
                   { 
@@ -267,8 +277,13 @@ dd_MS_loglik2 = function(pars1,pars2,brtsM,brtsS,missnumspec,methode = 'lsoda')
 {
 if(length(pars2) == 4)
 {
-   pars2[5] = 0
-   pars2[6] = 2
+  pars2[5] = 0
+  pars2[6] = 2
+  pars2[7] = 1
+}
+if(is.na(pars2[7]))
+{
+  pars2[7] == 0
 }
 brtsM = -sort(abs(brtsM),decreasing = TRUE)
 maxbrtsS = 0
@@ -401,14 +416,20 @@ if(min(pars1[1:5]) < 0 | tinn <= min(brtsM) | tinn > maxbrtsS)
                #dim(probs2) = c(lx,lx)
                if(t2 < 0 & t2 != tinn1)
                {
-                  if(brts[2,i] == 1)
-                  { 
-                     lavec = laMvec
-                  } else if(brts[2,i] == 2)
-                  { 
-                     lavec = laSvec
+                  if(t2 != tinn1)
+                  {  
+                    if(brts[2,i] == 1)
+                    { 
+                      lavec = laMvec
+                    }
+                    if(brts[2,i] == 2)
+                    { 
+                      lavec = laSvec
+                    }
+                    probs = lavec[2:(lx+1),2:(lx+1)] * probs # speciation event
+                  } else {
+                    if(pars2[7] == TRUE) { probs = kM/(nxt + kM) * probs }
                   }
-                  probs = lavec[2:(lx+1),2:(lx+1)] * probs # speciation event
                   #probs2 = lavec[2:(lx+1),2:(lx+1)] * probs2
                   dim(probs) = c(lx2,1)
                   #print(as.numeric(probs2[1:10]))  

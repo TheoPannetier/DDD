@@ -1,4 +1,4 @@
-dd_MS_ML = function(brtsM, brtsS, tsplit, initparsopt = c(0.5, 0.1, 2 * (1 + length(brtsM) + length(brtsS) + sum(missnumspec)),(tsplit + max(brtsS))/2), parsfix = NULL, idparsopt = c(1:3,6), idparsfix = NULL, idparsnoshift = (1:6)[c(-idparsopt,(-1)^(length(idparsfix) != 0) * idparsfix)], res = 10*(1 + length(c(brtsM,brtsS)) + sum(missnumspec)), ddmodel = 1.3, missnumspec = 0, cond = 0, soc = 2, tol = c(1E-3, 1E-4, 1E-6), maxiter = 1000 * round((1.25)^length(idparsopt)), changeloglikifnoconv = FALSE, optimmethod = 'subplex', methode = 'analytical')
+dd_MS_ML = function(brtsM, brtsS, tsplit, initparsopt = c(0.5, 0.1, 2 * (1 + length(brtsM) + length(brtsS) + sum(missnumspec)),(tsplit + max(brtsS))/2), parsfix = NULL, idparsopt = c(1:3,6), idparsfix = NULL, idparsnoshift = (1:6)[c(-idparsopt,(-1)^(length(idparsfix) != 0) * idparsfix)], res = 10*(1 + length(c(brtsM,brtsS)) + sum(missnumspec)), ddmodel = 1.3, missnumspec = 0, cond = 0, soc = 2, tol = c(1E-3, 1E-4, 1E-6), maxiter = 1000 * round((1.25)^length(idparsopt)), changeloglikifnoconv = FALSE, optimmethod = 'subplex', methode = 'analytical',correction = FALSE)
 {
 # brtsM, brtsS = branching times of main clade and subclade (positive, from present to past)
 # - max(brtsM) = crown age
@@ -65,7 +65,7 @@ trparsopt = initparsopt/(1 + initparsopt)
 trparsopt[which(initparsopt == Inf)] = 1
 trparsfix = parsfix/(1 + parsfix)
 trparsfix[which(parsfix == Inf)] = 1
-pars2 = c(res,ddmodel,cond,tsplit,0,soc,tol,maxiter)
+pars2 = c(res,ddmodel,cond,tsplit,0,soc,correction,tol,maxiter)
 optimpars = c(tol,maxiter)
 initloglik = dd_MS_loglik_choosepar(trparsopt = trparsopt,trparsfix = trparsfix,idparsopt = idparsopt,idparsfix = idparsfix,idparsnoshift = idparsnoshift,pars2 = pars2,brtsM = brtsM,brtsS = brtsS,missnumspec = missnumspec, methode = methode)
 cat("The loglikelihood for the initial parameter values is",initloglik,"\n")
