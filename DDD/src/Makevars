@@ -1,0 +1,15 @@
+C_OBJS = R_init_DDD.o
+FT_OBJS = dd_loglik_rhs_FORTRAN.o
+
+.NOTPARALLEL: all
+all: clean $(SHLIB) cleanup
+
+dd_dimmod.mod: dd_loglik_rhs_FORTRAN.o
+
+$(SHLIB): $(FT_OBJS) dd_loglik_rhs_FORTRAN.o $(C_OBJS) R_init_DDD.o
+
+clean:
+	@rm -rf *.o *.mod *.d *.rc *.so *.dylib *.dll *.a *.lib $(SHLIB) $(OBJECTS)
+
+cleanup:
+	@rm -rf *.mod *.o

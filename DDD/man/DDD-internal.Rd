@@ -64,10 +64,11 @@
 \alias{dd_integrate}
 \alias{dd_ode_FORTRAN}
 \alias{dd_loglik_rhs_precomp}
-\alias{fill1d}
-\alias{initmod}
-\alias{runmod}
-\alias{runmodbw}
+\alias{dd_fill1d}
+\alias{dd_initmod}
+\alias{dd_runmod}
+\alias{dd_runmodbw}
+\alias{dd_runmodtd}
 \title{Internal DDD Functions}
 \description{Internal DDD functions}
 \details{These are not to be called by the user.}

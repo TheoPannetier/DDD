@@ -440,7 +440,7 @@ dd_integrate = function(initprobs,tvec,rhs_func,pars,rtol,atol,method)
   } else
   if(rhs_func_name == 'dd_loglik_bw_rhs_FORTRAN')
   {
-    y = dd_ode_FORTRAN(initprobs,tvec,parsvec,atol,rtol,method,runmod = "runmodbw")
+    y = dd_ode_FORTRAN(initprobs,tvec,parsvec,atol,rtol,method,runmod = "dd_runmodbw")
   } else
   {
     y = ode(initprobs,tvec,rhs_func,parsvec,rtol = rtol,atol = atol,method = method)
@@ -455,14 +455,14 @@ dd_ode_FORTRAN <- function(
   atol,
   rtol,
   methode,
-  runmod = "runmod"
+  runmod = "dd_runmod"
 )
 {
   #system("R CMD SHLIB d:/data/ms/DDD/dd_loglik_rhs_FORTRAN.f")
   #dyn.load(paste("d:/data/ms/DDD/dd_loglik_rhs_FORTRAN", .Platform$dynlib.ext, sep = ""))
   N <- length(initprobs)
   probs <- ode(y = initprobs, parms = c(N + 0.,parsvec[length(parsvec)] + 0.), rpar = parsvec[-length(parsvec)], 
-               times = tvec, func = runmod, initfunc = "initmod", 
+               times = tvec, func = runmod, initfunc = "dd_initmod", 
                ynames = c("SV"), dimens = N + 2, nout = 1, outnames = c("Sum"), 
                dllname = "DDD",atol = atol, rtol = rtol, method = methode)[,1:(N + 1)]
   #dyn.unload(paste("d:/data/ms/DDD/dd_loglik_rhs_FORTRAN", .Platform$dynlib.ext, sep = ""))

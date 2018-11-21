@@ -29,3 +29,5 @@ for( i in seq_along(trees)){
 }
 #save(results, file = ".RData")
 
+
+bd_loglik(pars1 = c(0.8,0.1,40),pars2 = c(4,1,0,0,2),brts = 1:30,missnumspec = 0)

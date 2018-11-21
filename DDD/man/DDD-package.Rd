@@ -132,7 +132,10 @@ under diversity-dependent diversification models.\cr \cr
    - Uses expm instead of expoRkit because the latter is no longer supported on CRAN\cr\cr
    New in version 3.8\cr
    - Uses coalescent approximation when mu/lambda is small and normal computation causes numerical problems\cr
-   - Correction of the likelihood of the KI and MS models by a division by the number of species at the shift time. The old likelihood is still available (and the default). To use the correction, use pars2[7] = TRUE in dd_KI_loglik and dd_MS_loglik, and correction = TRUE in dd_KI_ML and dd_MS_ML.\cr\cr
+   - Correction of the likelihood of the KI and MS models by a division by the number of species at the shift time. The old likelihood is still available (and the default). To use the correction, use pars2[7] = TRUE in dd_KI_loglik and dd_MS_loglik, and correction = TRUE in dd_KI_ML and dd_MS_ML.\cr
+   - Uses FORTRAN code for tdmodel = 4.\cr
+   - FORTRAN functions renamed with prefix dd_ \cr
+   - Cleans dimmod.mod from src\cr\cr
    Forthcoming:\cr
    - High-precision arithmetic in numerically unstable regions of bd_loglik\cr
 }
