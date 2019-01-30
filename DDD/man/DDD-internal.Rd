@@ -69,6 +69,7 @@
 \alias{dd_runmod}
 \alias{dd_runmodbw}
 \alias{dd_runmodtd}
+\alias{compare_bd_loglik_version}
 \title{Internal DDD Functions}
 \description{Internal DDD functions}
 \details{These are not to be called by the user.}
