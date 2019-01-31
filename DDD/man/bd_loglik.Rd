@@ -27,7 +27,9 @@
     - \code{pars[2] == 3} conditioning on the total number of extant taxa (including missing species) \cr \cr
     \code{pars2[3]} sets whether the likelihood is for the branching times (0) or the phylogeny (1) \cr \cr
     \code{pars2[4]} sets whether the parameters and likelihood should be shown on screen (1) or not (0)\cr \cr
-    \code{pars2[5]} sets whether the first data point is stem age (1) or crown age (2)
+    \code{pars2[5]} sets whether the first data point is stem age (1) or crown age (2) \cr \cr
+    \code{pars2[6]} is only useful if \code{pars2[1] == 4}. Sets the maximum number of species for  which a probability must be computed. This must be larger than 1 + missnumspec + length(brts). Important to set if Kprime is large, i.e. when lambda0 and mu0 are similar.
+
 }
   \item{brts}{A set of branching times of a phylogeny, all positive }
   \item{missnumspec}{The number of species that are in the clade but missing in the phylogeny } 
