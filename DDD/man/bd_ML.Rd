@@ -24,7 +24,7 @@ bd_ML(
    changeloglikifnoconv = FALSE,
    optimmethod = 'subplex',
    methode = 'lsoda',
-   verbose = 1
+   verbose = 0
    )
 }
 \arguments{

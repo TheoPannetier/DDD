@@ -25,7 +25,7 @@ dd_ML(
    changeloglikifnoconv = FALSE,
    optimmethod = 'subplex',
    methode = 'analytical'
-   verbose = 1)
+   verbose = 0)
 }
 \arguments{
   \item{brts}{A set of branching times of a phylogeny, all positive }

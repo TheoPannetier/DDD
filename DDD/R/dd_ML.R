@@ -35,7 +35,7 @@ dd_ML = function(
   changeloglikifnoconv = FALSE,
   optimmethod = 'subplex',
   methode = 'analytical',
-  verbose = 1
+  verbose = 0
 )
 {
 # brts = branching times (positive, from present to past)
