@@ -1,4 +1,4 @@
-bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(brts) + missnumspec) * (tdmodel > 1)), idparsopt = c(1,2 + (tdmodel > 1)), idparsfix = (1:4)[-idparsopt], parsfix = rep(0,4)[idparsfix], missnumspec = 0, tdmodel = 0, cond = 1, btorph = 1, soc = 2, tol = c(1E-3, 1E-4, 1E-6), maxiter = 1000 * round((1.25)^length(idparsopt)), changeloglikifnoconv = FALSE, optimmethod = 'subplex',methode = 'lsoda')
+bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(brts) + missnumspec) * (tdmodel > 1)), idparsopt = c(1,2 + (tdmodel > 1)), idparsfix = (1:4)[-idparsopt], parsfix = rep(0,4)[idparsfix], missnumspec = 0, tdmodel = 0, cond = 1, btorph = 1, soc = 2, tol = c(1E-3, 1E-4, 1E-6), maxiter = 1000 * round((1.25)^length(idparsopt)), changeloglikifnoconv = FALSE, optimmethod = 'subplex',methode = 'lsoda', verbose = 1)
 {
   # brts = branching times (positive, from present to past)
   # - max(brts) = crown age
@@ -27,8 +27,10 @@ bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(
   # - changeloglikifnoconv = if T the loglik will be set to -Inf if ML does not converge
   # - optimmethod = 'subplex' (current default) or 'simplex' (default of previous versions)  
   # - methode = the method used in the numerical solving of the set of the ode's 
+  # - verbose = sets whether parameters and likelihood should be printed (1) or not (0)
 
   options(warn = -1)
+  if(!verbose %in% c(0,1)){stop("Verbose must be 1 or 0.")}
   brts = sort(abs(as.numeric(brts)),decreasing = TRUE)
   out2 = invisible(data.frame(lambda0 = -1,mu0 = -1,lambda1 = -1, mu1 = -1, loglik = -1, df = -1, conv = -1))
   if(is.numeric(brts) == FALSE)
@@ -60,7 +62,7 @@ bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(
   trparsopt[which(initparsopt == Inf)] = 1
   trparsfix = parsfix/(1 + parsfix)
   trparsfix[which(parsfix == Inf)] = 1
-  pars2 = c(tdmodel,cond,btorph,0,soc,1000,tol,maxiter)
+  pars2 = c(tdmodel,cond,btorph,verbose,soc,1000,tol,maxiter)
   optimpars = c(tol,maxiter)
   initloglik = bd_loglik_choosepar(trparsopt = trparsopt,trparsfix = trparsfix,idparsopt = idparsopt,idparsfix = idparsfix,pars2 = pars2,brts = brts,missnumspec = missnumspec, methode = methode)
   cat("The loglikelihood for the inital parameter values is",initloglik,"\n")

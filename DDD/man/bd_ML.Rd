@@ -23,7 +23,8 @@ bd_ML(
    maxiter = 1000 * round((1.25)^length(idparsopt)),
    changeloglikifnoconv = FALSE,
    optimmethod = 'subplex',
-   methode = 'lsoda'      
+   methode = 'lsoda',
+   verbose = 1
    )
 }
 \arguments{
@@ -67,7 +68,9 @@ not specified in idparsopt.
   \item{maxiter}{ Sets the maximum number of iterations in the optimization}
   \item{changeloglikifnoconv}{ if TRUE the loglik will be set to -Inf if ML does not converge}
   \item{optimmethod}{ Method used in optimization of the likelihood. Current default is 'subplex'. Alternative is 'simplex' (default of previous versions)}
-  \item{methode}{The method used to solve the master equation under tdmodel = 4, default is 'lsoda'.}     
+  \item{methode}{The method used to solve the master equation under tdmodel = 4, default is 'lsoda'.}
+  \item{verbose}{Sets whether parameters and likelihood should be printed (1) or not (0)}
+
 }
 \details{
 The output is a dataframe containing estimated parameters and maximum loglikelihood.
