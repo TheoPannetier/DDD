@@ -472,20 +472,45 @@ simplex = function(fun,trparsopt,optimpars,...)
 
 optimizer = function(optimmethod = 'simplex',optimpars = c(1E-4,1E-4,1E-6,1000),fun,trparsopt, ...)
 {
-    if(optimmethod == 'simplex')
-    {
-        out = simplex(fun = fun,trparsopt = trparsopt,optimpars = optimpars,...)
+  if(optimmethod == 'simplex')
+  {
+    out = simplex(fun = fun,trparsopt = trparsopt,optimpars = optimpars,...)
+  }
+  if(optimmethod == 'subplex')
+  {
+    minfun = function(fun,trparsopt,...)
+    {           
+      return(-fun(trparsopt = trparsopt,...))
     }
-    if(optimmethod == 'subplex')
-    {
-        minfun = function(fun,trparsopt,...)
-        {           
-           return(-fun(trparsopt = trparsopt,...))
+    
+    trySubplex <- function(trparsopt = trparsopt, optimpars = optimpars, ...){
+      tryCatch(
+        # main function to run
+        subplex::subplex(
+          par = trparsopt,
+          fn = minfun,
+          control = list(abstol = optimpars[3],
+                         reltol = optimpars[1],
+                         maxit = optimpars[4]
+          ),
+          fun = fun, ...
+        ),
+        error = function(e){
+          print("subplex has encountered an error")
+          # output in case of error
+          list(
+            par = rep(-1, length(trparsopt)),
+            value = -Inf,
+            convergence = -3 # other values like -1 are already used by subplex for other situations
+          )
         }
-        out = subplex::subplex(par = trparsopt,fn = minfun,control = list(abstol = optimpars[3],reltol = optimpars[1],maxit = optimpars[4]),fun = fun,...)
-        out = list(par = out$par, fvalues = -out$value, conv = out$convergence)
+      )
     }
-    return(out)
+    out <- trySubplex(trparsopt = trparsopt, optimpars = optimpars, ...)
+    
+    out = list(par = out$par, fvalues = -out$value, conv = out$convergence)
+  }
+  return(out)
 }
 
 transform_pars <- function(pars)
