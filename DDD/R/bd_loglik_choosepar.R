@@ -1,4 +1,4 @@
-bd_loglik_choosepar = function(trparsopt,trparsfix,idparsopt,idparsfix,pars2,brts,missnumspec,methode)
+bd_loglik_choosepar = function(trparsopt,trparsfix,idparsopt,idparsfix,pars2,brts,missnumspec,methode, outputFile = NA)
 {
    trpars1 = rep(0,4)
    trpars1[idparsopt] = trparsopt
@@ -11,7 +11,7 @@ bd_loglik_choosepar = function(trparsopt,trparsfix,idparsopt,idparsfix,pars2,brt
       loglik = -Inf
    } else {
       pars1 = trpars1/(1 - trpars1)
-      loglik = bd_loglik(pars1 = pars1,pars2 = pars2[1:6],brts = brts,missnumspec = missnumspec, methode = methode)
+      loglik = bd_loglik(pars1 = pars1,pars2 = pars2[1:6],brts = brts,missnumspec = missnumspec, methode = methode, outputFile = outputFile)
       if(is.nan(loglik) || is.na(loglik))
       {
          cat("There are parameter values used which cause numerical problems.\n")

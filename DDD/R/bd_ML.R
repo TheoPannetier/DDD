@@ -1,4 +1,4 @@
-bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(brts) + missnumspec) * (tdmodel > 1)), idparsopt = c(1,2 + (tdmodel > 1)), idparsfix = (1:4)[-idparsopt], parsfix = rep(0,4)[idparsfix], missnumspec = 0, tdmodel = 0, cond = 1, btorph = 1, soc = 2, tol = c(1E-3, 1E-4, 1E-6), maxiter = 1000 * round((1.25)^length(idparsopt)), changeloglikifnoconv = FALSE, optimmethod = 'subplex',methode = 'lsoda', verbose = 0)
+bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(brts) + missnumspec) * (tdmodel > 1)), idparsopt = c(1,2 + (tdmodel > 1)), idparsfix = (1:4)[-idparsopt], parsfix = rep(0,4)[idparsfix], missnumspec = 0, tdmodel = 0, cond = 1, btorph = 1, soc = 2, tol = c(1E-3, 1E-4, 1E-6), maxiter = 1000 * round((1.25)^length(idparsopt)), changeloglikifnoconv = FALSE, optimmethod = 'subplex',methode = 'lsoda', verbose = 0, outputFile = NA)
 {
   # brts = branching times (positive, from present to past)
   # - max(brts) = crown age
@@ -28,7 +28,6 @@ bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(
   # - optimmethod = 'subplex' (current default) or 'simplex' (default of previous versions)  
   # - methode = the method used in the numerical solving of the set of the ode's 
   # - verbose = sets whether parameters and likelihood should be printed (1) or not (0)
-
   options(warn = -1)
   if(!verbose %in% c(0,1)){stop("Verbose must be 1 or 0.")}
   brts = sort(abs(as.numeric(brts)),decreasing = TRUE)
@@ -64,14 +63,14 @@ bd_ML = function(brts, initparsopt = c(0.1,0.05 * (tdmodel <= 1) + 10 * (length(
   trparsfix[which(parsfix == Inf)] = 1
   pars2 = c(tdmodel,cond,btorph,verbose,soc,1000,tol,maxiter)
   optimpars = c(tol,maxiter)
-  initloglik = bd_loglik_choosepar(trparsopt = trparsopt,trparsfix = trparsfix,idparsopt = idparsopt,idparsfix = idparsfix,pars2 = pars2,brts = brts,missnumspec = missnumspec, methode = methode)
+  initloglik = bd_loglik_choosepar(trparsopt = trparsopt,trparsfix = trparsfix,idparsopt = idparsopt,idparsfix = idparsfix,pars2 = pars2,brts = brts,missnumspec = missnumspec, methode = methode, outputFile = outputFile)
   cat("The loglikelihood for the inital parameter values is",initloglik,"\n")
   if(initloglik == -Inf)
   {
      cat("The initial parameter values have a likelihood that is equal to 0 or below machine precision. Try again with different initial values.\n")
      return(out2)
   }
-  out = optimizer(optimmethod = optimmethod,optimpars = optimpars,fun = bd_loglik_choosepar,trparsopt = trparsopt,idparsopt = idparsopt,trparsfix = trparsfix,idparsfix = idparsfix,pars2 = pars2,brts = brts,missnumspec = missnumspec,methode = methode)
+  out = optimizer(optimmethod = optimmethod,optimpars = optimpars,fun = bd_loglik_choosepar,trparsopt = trparsopt,idparsopt = idparsopt,trparsfix = trparsfix,idparsfix = idparsfix,pars2 = pars2,brts = brts,missnumspec = missnumspec,methode = methode, outputFile = outputFile)
   if(out$conv != 0)
   {
      cat("Optimization has not converged. Try again with different initial values.\n")

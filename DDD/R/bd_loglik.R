@@ -1,4 +1,4 @@
-bd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'lsoda')
+bd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'lsoda', outputFile = NA)
 # pars1 contains model parameters
 # - pars1[1] = la0 = speciation rate
 # - pars1[2] = mu0 = extinction rate
@@ -55,6 +55,9 @@ bd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'lsoda')
     intPtTint2 = pars[2]/ff(t1,pars) * ( (T - t1)/pars[3] + (ff(t1,pars) - ff(T,pars))/(pars[1] - pars[2]) )
     return(intPtTint2)
   }
+  
+  if(!(is.character(outputFile) | is.na(outputFile))){ stop("argument outputFile should be a character") }
+  if(!is.na(outputFile) & pars2[4] == 0){ warning("verbose is off, argument outputFile will be ignored.") }
   
   tdmodel = pars2[1]
   if(min(pars1) < 0 | (tdmodel == 4 & pars1[1] <= pars1[2]))
@@ -340,6 +343,9 @@ bd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'lsoda')
       }
       if(pars2[4] == 1)
       {
+        if (!is.na(outputFile)){
+          sink(file = outputFile, append = T)
+        }
         if(tdmodel == 0)
         {
           s1 = sprintf('Parameters: %f %f',pars1[1],pars1[2])
@@ -353,6 +359,7 @@ bd_loglik = function(pars1,pars2,brts,missnumspec,methode = 'lsoda')
         s2 = sprintf(', Loglikelihood: %f',loglik)
         cat(s1,s2,"\n",sep = "")
         flush.console()
+        sink()
       } 
     }
     loglik = as.numeric(loglik)
